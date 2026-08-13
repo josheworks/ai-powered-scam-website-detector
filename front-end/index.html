@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scam Website Detector - Check URL</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🛡️ Scam Website Detector</div>
+    <div class="nav-links">
+      <a href="index.html" class="active">Check URL</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Check a Website's Safety</h1>
+    <p class="subtitle">Paste a URL below to analyze it for scam indicators.</p>
+
+    <form id="checkForm" class="check-form">
+      <input type="text" id="urlInput" placeholder="https://example.com" required>
+      <button type="submit" id="checkBtn">Check URL</button>
+    </form>
+
+    <div id="loading" class="loading hidden">Analyzing...</div>
+
+    <div id="resultCard" class="result-card hidden">
+      <div class="verdict-row">
+        <span id="verdictBadge" class="badge"></span>
+        <span id="scoreText" class="score"></span>
+      </div>
+      <ul id="reasonsList" class="reasons-list"></ul>
+    </div>
+
+    <div id="errorBox" class="error-box hidden"></div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scam Website Detector - History</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🛡️ Scam Website Detector</div>
+    <div class="nav-links">
+      <a href="index.html">Check URL</a>
+      <a href="history.html" class="active">History</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Check History</h1>
+    <p class="subtitle">Previously analyzed URLs.</p>
+
+    <div id="loading" class="loading hidden">Loading history...</div>
+    <div id="historyList" class="history-list"></div>
+    <div id="errorBox" class="error-box hidden"></div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/history-main.js"></script>
+</body>
+</html>
