@@ -11,9 +11,19 @@ async function checkUrl(url) {
   });
 
   if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.message || `Request failed with status ${response.status}`);
-  }
+  const errData = await response.json().catch(() => ({}));
+
+  const error = new Error(
+    errData.error ||
+    errData.message ||
+    `Request failed with status ${response.status}`
+  );
+
+  error.errorType = errData.errorType;
+  error.status = response.status;
+
+  throw error;
+}
 
   return response.json(); // { score, verdict, reasons }
 }

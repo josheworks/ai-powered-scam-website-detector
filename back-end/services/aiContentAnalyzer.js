@@ -62,37 +62,54 @@ async function analyzeContent(content, url) {
 
   // 1. Call Gemini. The key goes in a header, never in the URL, so it can't leak into logs.
   let response;
-  try {
-    response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-      },
-      body: JSON.stringify(requestBody),
-      signal: AbortSignal.timeout(AI_TIMEOUT_MS),
-    });
-  } catch (err) {
-    if (err.name === "TimeoutError" || err.name === "AbortError") {
-      return fail(AI_ERROR_TYPES.TIMEOUT, "Gemini request timed out");
-    }
-    return fail(AI_ERROR_TYPES.NETWORK_ERROR, "Could not reach Gemini");
+
+console.log("Sending request to Gemini...");
+
+try {
+  response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey,
+    },
+    body: JSON.stringify(requestBody),
+    signal: AbortSignal.timeout(AI_TIMEOUT_MS),
+  });
+
+  console.log("Gemini HTTP status:", response.status);
+  console.log("Gemini response OK:", response.ok);
+
+} catch (err) {
+  console.error("Gemini request failed:", err.name, err.message);
+  console.error("Underlying cause:", err.cause);
+
+  if (
+    err.name === "TimeoutError" ||
+    err.name === "AbortError"
+  ) {
+    return fail(
+      AI_ERROR_TYPES.TIMEOUT,
+      "Gemini request timed out"
+    );
   }
 
+  return fail(
+    AI_ERROR_TYPES.NETWORK_ERROR,
+    "Could not reach Gemini"
+  );
+}
   // 2. A non-200 status does not throw, so check it ourselves (same lesson as fetchPageContent).
 if (!response.ok) {
-const details = await response.text();
+  const details = await response.text();
 
+  console.error("Gemini HTTP status:", response.status);
+  console.error("Gemini error body:", details);
 
-console.error("Gemini HTTP status:", response.status);
-console.error("Gemini error body:", details);
-
-return {
+  return {
     success: false,
     error: `Gemini API returned HTTP ${response.status}`,
-    errorType: "AI_API_ERROR"
-};
-
+    errorType: AI_ERROR_TYPES.API_ERROR,
+  };
 }
 
 
