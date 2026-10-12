@@ -149,7 +149,7 @@ async function fetchPageContent(rawUrl) {
   }
 
   // STEP 3: a 404 does NOT throw, so we must check the status ourselves.
-  {
+  if (!response.ok) {
     await discard(response);
     return fail(url, ERROR_TYPES.HTTP_ERROR, `Server responded with status ${response.status}`);
   }
