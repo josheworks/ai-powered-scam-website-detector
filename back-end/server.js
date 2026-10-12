@@ -14,22 +14,22 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/check-url", async (req, res) => {
-  
-  const url = req.body.url;
-  if (!url) {
-    return res.status(400).json({ error: "URL is required" });
+  try {
+    const url = req.body.url;
+    if (!url) {
+      return res.status(400).json({ error: "URL is required" });
+    }
+
+    const urlscore = await urlScoreCheck(url);
+    const { score, verdict, reasons } = urlscore;
+
+    await Check.create({ url, score, verdict, reasons });
+
+    res.json(urlscore);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
   }
-  const urlscore = urlScoreCheck(url);
-  const { score, verdict, reasons } = urlscore;
-    await Check.create({
-    url,
-    score,
-    verdict,
-    reasons
-  });
-
-  res.json(urlscore);
-
 });
 
 //history
